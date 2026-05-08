@@ -151,7 +151,7 @@
 </head>
 <body>
   <nav>
-    <a href="index.html">← Back to Home</a>
+    <a href="index.html" class="logo">NEXACON</a>
     <ul class="nav-links">
       <li><a href="schedule.html">Schedule</a></li>
       <li><a href="speakers.html" class="active">Speakers</a></li>
@@ -177,8 +177,7 @@
 
     <div class="speakers-grid">
 
-      <!-- Featured -->
-      <div class="speaker-card featured-speaker">
+      <div class="speaker-card featured-speaker" data-topic="ai">
         <div class="speaker-avatar">AK</div>
         <div>
           <div class="speaker-name">Arjun Kapoor</div>
@@ -189,7 +188,7 @@
         </div>
       </div>
 
-      <div class="speaker-card">
+      <div class="speaker-card" data-topic="ai">
         <div class="speaker-avatar">PR</div>
         <div class="speaker-name">Priya Rajan</div>
         <div class="speaker-role">Closing Keynote Speaker</div>
@@ -198,7 +197,7 @@
         <span class="speaker-topic">AI & ML</span>
       </div>
 
-      <div class="speaker-card">
+      <div class="speaker-card" data-topic="cloud">
         <div class="speaker-avatar">SM</div>
         <div class="speaker-name">Siddharth Mehta</div>
         <div class="speaker-role">Day 2 Keynote</div>
@@ -207,7 +206,7 @@
         <span class="speaker-topic">Cloud</span>
       </div>
 
-      <div class="speaker-card">
+      <div class="speaker-card" data-topic="cloud">
         <div class="speaker-avatar">ND</div>
         <div class="speaker-name">Neha Desai</div>
         <div class="speaker-role">Workshop Lead</div>
@@ -216,7 +215,7 @@
         <span class="speaker-topic">Cloud</span>
       </div>
 
-      <div class="speaker-card">
+      <div class="speaker-card" data-topic="devops">
         <div class="speaker-avatar">RS</div>
         <div class="speaker-name">Ravi Shankar</div>
         <div class="speaker-role">Workshop Speaker</div>
@@ -225,7 +224,7 @@
         <span class="speaker-topic">DevOps</span>
       </div>
 
-      <div class="speaker-card">
+      <div class="speaker-card" data-topic="ai">
         <div class="speaker-avatar">AM</div>
         <div class="speaker-name">Asha Menon</div>
         <div class="speaker-role">Talk Speaker</div>
@@ -238,7 +237,7 @@
   </div>
 
   <footer>
-    <a href="../index.html">← Back to Home</a> &nbsp;|&nbsp; &copy; 2026 NexaCon. All rights reserved.
+    <a href="index.html">← Back to Home</a> &nbsp;|&nbsp; &copy; 2026 NexaCon. All rights reserved.
   </footer>
 
   <script>
@@ -246,6 +245,18 @@
       btn.addEventListener('click', function () {
         document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
         this.classList.add('active');
+
+        const filter = this.textContent.trim().toLowerCase();
+
+        document.querySelectorAll('.speaker-card').forEach(card => {
+          if (filter === 'all') {
+            card.style.display = '';
+          } else if (filter === 'ai & ml') {
+            card.style.display = card.dataset.topic === 'ai' ? '' : 'none';
+          } else {
+            card.style.display = card.dataset.topic === filter ? '' : 'none';
+          }
+        });
       });
     });
   </script>
