@@ -1,1 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Speakers — NexaCon 2026</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Syne:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --neon: #00F5FF;
+      --neon-dim: rgba(0,245,255,0.12);
+      --neon-glow: 0 0 10px #00F5FF, 0 0 30px rgba(0,245,255,0.4);
+      --bg: #040a0f;
+      --bg2: #070e15;
+      --card: rgba(0,245,255,0.04);
+      --border: rgba(0,245,255,0.15);
+      --text: #c8e8ee;
+      --muted: rgba(200,232,238,0.45);
+      --white: #eaf9fb;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg); color: var(--text);
+      font-family: 'Syne', sans-serif; overflow-x: hidden;
+    }
+    body::before {
+      content: ''; position: fixed; inset: 0;
+      background-image:
+        linear-gradient(rgba(0,245,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,245,255,0.03) 1px, transparent 1px);
+      background-size: 60px 60px; pointer-events: none; z-index: 0;
+    }
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 60px; background: rgba(4,10,15,0.85);
+      backdrop-filter: blur(12px); border-bottom: 1px solid var(--border);
+    }
+    .logo {
+      font-family: 'Orbitron', monospace; font-weight: 900; font-size: 1.3rem;
+      color: var(--neon); text-shadow: var(--neon-glow); letter-spacing: 2px; text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 40px; list-style: none; }
+    .nav-links a {
+      color: var(--muted); text-decoration: none; font-size: 0.85rem;
+      letter-spacing: 1.5px; text-transform: uppercase; transition: color 0.3s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--neon); text-shadow: var(--neon-glow); }
 
+    .page-hero {
+      position: relative; z-index: 1;
+      padding: 160px 60px 80px;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg2);
+    }
+    .section-label { font-size: 0.72rem; letter-spacing: 4px; text-transform: uppercase; color: var(--neon); margin-bottom: 12px; }
+    .page-hero h1 {
+      font-family: 'Orbitron', monospace; font-weight: 900;
+      font-size: clamp(2.5rem, 6vw, 5rem); color: var(--white); line-height: 1;
+    }
+    .page-hero p { color: var(--muted); font-size: 1rem; margin-top: 16px; font-weight: 300; max-width: 500px; }
+
+    .speakers-main {
+      position: relative; z-index: 1;
+      padding: 80px 60px;
+      max-width: 1200px; margin: 0 auto;
+    }
+
+    .filter-bar {
+      display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 60px;
+    }
+    .filter-btn {
+      padding: 10px 24px;
+      font-family: 'Syne', sans-serif; font-size: 0.78rem;
+      letter-spacing: 2px; text-transform: uppercase;
+      border: 1px solid var(--border); background: transparent;
+      color: var(--muted); cursor: pointer; transition: all 0.3s;
+    }
+    .filter-btn.active, .filter-btn:hover {
+      background: var(--neon-dim); color: var(--neon); border-color: var(--neon);
+    }
+
+    .speakers-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .speaker-card {
+      border: 1px solid var(--border); background: var(--card);
+      padding: 40px 32px; position: relative; overflow: hidden;
+      transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+    }
+    .speaker-card::after {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: var(--neon); transform: scaleX(0); transition: transform 0.3s;
+    }
+    .speaker-card:hover { transform: translateY(-8px); border-color: var(--neon); box-shadow: 0 20px 50px rgba(0,245,255,0.08); }
+    .speaker-card:hover::after { transform: scaleX(1); }
+
+    .speaker-avatar {
+      width: 90px; height: 90px; border-radius: 50%;
+      background: var(--neon-dim); border: 2px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Orbitron', monospace; font-size: 1.6rem; font-weight: 700;
+      color: var(--neon); margin-bottom: 20px;
+    }
+    .speaker-name {
+      font-family: 'Orbitron', monospace; font-size: 0.9rem; font-weight: 700;
+      color: var(--white); margin-bottom: 6px; letter-spacing: 1px;
+    }
+    .speaker-role { font-size: 0.82rem; color: var(--neon); margin-bottom: 4px; }
+    .speaker-company { font-size: 0.78rem; color: var(--muted); margin-bottom: 16px; }
+    .speaker-bio { font-size: 0.82rem; color: var(--muted); line-height: 1.7; font-weight: 300; margin-bottom: 20px; }
+    .speaker-topic {
+      display: inline-block; background: var(--neon-dim); color: var(--neon);
+      font-size: 0.68rem; letter-spacing: 2px; text-transform: uppercase; padding: 5px 12px;
+    }
+
+    .featured-speaker {
+      grid-column: span 2;
+      display: grid; grid-template-columns: 180px 1fr;
+      gap: 40px; align-items: center;
+    }
+    .featured-speaker .speaker-avatar {
+      width: 140px; height: 140px; font-size: 2.2rem;
+    }
+    .featured-speaker .speaker-name { font-size: 1.2rem; }
+
+    footer {
+      position: relative; z-index: 1;
+      padding: 40px 60px; border-top: 1px solid var(--border);
+      text-align: center; font-size: 0.78rem; color: var(--muted);
+    }
+    footer a { color: var(--neon); text-decoration: none; }
+
+    @media (max-width: 900px) {
+      nav { padding: 16px 24px; }
+      .page-hero, .speakers-main { padding-left: 24px; padding-right: 24px; }
+      .speakers-grid { grid-template-columns: repeat(2, 1fr); }
+      .featured-speaker { grid-column: span 1; grid-template-columns: 1fr; }
+      .featured-speaker .speaker-avatar { width: 90px; height: 90px; font-size: 1.6rem; }
+    }
+    @media (max-width: 600px) {
+      .nav-links { display: none; }
+      .speakers-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="../index.html" class="logo">NEXACON</a>
+    <ul class="nav-links">
+      <li><a href="schedule.html">Schedule</a></li>
+      <li><a href="speakers.html" class="active">Speakers</a></li>
+      <li><a href="register.html">Register</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-hero">
+    <div class="section-label">&#9670; The Lineup</div>
+    <h1>SPEAKERS</h1>
+    <p>Industry leaders, researchers, and builders sharing the ideas that matter in 2026.</p>
+  </div>
+
+  <div class="speakers-main">
+    <div class="filter-bar">
+      <button class="filter-btn active">All</button>
+      <button class="filter-btn">AI & ML</button>
+      <button class="filter-btn">Cloud</button>
+      <button class="filter-btn">Web3</button>
+      <button class="filter-btn">DevOps</button>
+    </div>
+
+    <div class="speakers-grid">
+
+      <!-- Featured -->
+      <div class="speaker-card featured-speaker">
+        <div class="speaker-avatar">AK</div>
+        <div>
+          <div class="speaker-name">Arjun Kapoor</div>
+          <div class="speaker-role">Opening Keynote Speaker</div>
+          <div class="speaker-company">CTO — Infosys AI Labs</div>
+          <p class="speaker-bio">15 years shaping enterprise AI strategy across three continents. Arjun leads one of India's most ambitious AI research divisions and advises the government on national AI policy.</p>
+          <span class="speaker-topic">AI & ML</span>
+        </div>
+      </div>
+
+      <div class="speaker-card">
+        <div class="speaker-avatar">PR</div>
+        <div class="speaker-name">Priya Rajan</div>
+        <div class="speaker-role">Closing Keynote Speaker</div>
+        <div class="speaker-company">Head of Research — DeepMind India</div>
+        <p class="speaker-bio">Pioneer in reinforcement learning and AI safety. PhD from IIT Bombay, postdoc at Oxford. Author of 40+ peer-reviewed papers.</p>
+        <span class="speaker-topic">AI & ML</span>
+      </div>
+
+      <div class="speaker-card">
+        <div class="speaker-avatar">SM</div>
+        <div class="speaker-name">Siddharth Mehta</div>
+        <div class="speaker-role">Day 2 Keynote</div>
+        <div class="speaker-company">Founder — CloudNine Systems</div>
+        <p class="speaker-bio">Serial entrepreneur who built and exited two cloud infrastructure companies. Now focused on sustainable tech and responsible AI deployment.</p>
+        <span class="speaker-topic">Cloud</span>
+      </div>
+
+      <div class="speaker-card">
+        <div class="speaker-avatar">ND</div>
+        <div class="speaker-name">Neha Desai</div>
+        <div class="speaker-role">Workshop Lead</div>
+        <div class="speaker-company">VP Engineering — Razorpay</div>
+        <p class="speaker-bio">Leads a 400-person engineering org. Known for scaling distributed payment systems and her work on quantum-safe cryptography.</p>
+        <span class="speaker-topic">Cloud</span>
+      </div>
+
+      <div class="speaker-card">
+        <div class="speaker-avatar">RS</div>
+        <div class="speaker-name">Ravi Shankar</div>
+        <div class="speaker-role">Workshop Speaker</div>
+        <div class="speaker-company">Principal Engineer — Google</div>
+        <p class="speaker-bio">Cloud-native architect and Kubernetes contributor. Helped migrate Google's internal tooling to a fully serverless model.</p>
+        <span class="speaker-topic">DevOps</span>
+      </div>
+
+      <div class="speaker-card">
+        <div class="speaker-avatar">AM</div>
+        <div class="speaker-name">Asha Menon</div>
+        <div class="speaker-role">Talk Speaker</div>
+        <div class="speaker-company">Product Lead — GitHub</div>
+        <p class="speaker-bio">Building the next generation of developer tooling. Asha's work on AI-assisted code review has been adopted by 2M+ developers globally.</p>
+        <span class="speaker-topic">AI & ML</span>
+      </div>
+
+    </div>
+  </div>
+
+  <footer>
+    <a href="../index.html">← Back to Home</a> &nbsp;|&nbsp; &copy; 2026 NexaCon. All rights reserved.
+  </footer>
+
+  <script>
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', function () {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>
