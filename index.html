@@ -1,1 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NexaCon 2026</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Syne:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --neon: #00F5FF;
+      --neon-dim: rgba(0,245,255,0.15);
+      --neon-glow: 0 0 10px #00F5FF, 0 0 30px rgba(0,245,255,0.4);
+      --bg: #040a0f;
+      --bg2: #070e15;
+      --card: rgba(0,245,255,0.04);
+      --border: rgba(0,245,255,0.15);
+      --text: #c8e8ee;
+      --muted: rgba(200,232,238,0.45);
+      --white: #eaf9fb;
+    }
 
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Syne', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* ── GRID BACKGROUND ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,245,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,245,255,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── NAVBAR ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 60px;
+      background: rgba(4,10,15,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo {
+      font-family: 'Orbitron', monospace;
+      font-weight: 900;
+      font-size: 1.3rem;
+      color: var(--neon);
+      text-shadow: var(--neon-glow);
+      letter-spacing: 2px;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 40px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      transition: color 0.3s, text-shadow 0.3s;
+    }
+
+    .nav-links a:hover {
+      color: var(--neon);
+      text-shadow: var(--neon-glow);
+    }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 140px 40px 80px;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .hero-orb {
+      position: absolute;
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,245,255,0.08) 0%, transparent 70%);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      animation: pulse 4s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
+      50% { transform: translate(-50%, -50%) scale(1.15); opacity: 1; }
+    }
+
+    .hero-badge {
+      display: inline-block;
+      border: 1px solid var(--border);
+      background: var(--neon-dim);
+      color: var(--neon);
+      font-size: 0.72rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      padding: 8px 20px;
+      border-radius: 2px;
+      margin-bottom: 32px;
+      animation: fadeUp 0.8s ease forwards;
+      opacity: 0;
+    }
+
+    .hero h1 {
+      font-family: 'Orbitron', monospace;
+      font-weight: 900;
+      font-size: clamp(3.5rem, 10vw, 8rem);
+      line-height: 0.95;
+      color: var(--white);
+      letter-spacing: -2px;
+      margin-bottom: 8px;
+      animation: fadeUp 0.8s 0.2s ease forwards;
+      opacity: 0;
+    }
+
+    .hero h1 span {
+      color: var(--neon);
+      text-shadow: var(--neon-glow);
+    }
+
+    .hero-year {
+      font-family: 'Orbitron', monospace;
+      font-size: clamp(1.2rem, 3vw, 2rem);
+      color: var(--muted);
+      letter-spacing: 8px;
+      margin-bottom: 28px;
+      animation: fadeUp 0.8s 0.35s ease forwards;
+      opacity: 0;
+    }
+
+    .hero-sub {
+      font-size: 1.1rem;
+      color: var(--muted);
+      max-width: 520px;
+      margin: 0 auto 16px;
+      line-height: 1.7;
+      font-weight: 300;
+      animation: fadeUp 0.8s 0.5s ease forwards;
+      opacity: 0;
+    }
+
+    .hero-meta {
+      font-size: 0.85rem;
+      color: var(--neon);
+      letter-spacing: 2px;
+      margin-bottom: 44px;
+      animation: fadeUp 0.8s 0.65s ease forwards;
+      opacity: 0;
+    }
+
+    .hero-btns {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+      animation: fadeUp 0.8s 0.8s ease forwards;
+      opacity: 0;
+    }
+
+    .btn-primary {
+      background: var(--neon);
+      color: #040a0f;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 0.85rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 16px 36px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+      transition: box-shadow 0.3s, transform 0.2s;
+    }
+
+    .btn-primary:hover {
+      box-shadow: var(--neon-glow);
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--neon);
+      font-family: 'Syne', sans-serif;
+      font-weight: 500;
+      font-size: 0.85rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 15px 36px;
+      border: 1px solid var(--neon);
+      cursor: pointer;
+      text-decoration: none;
+      clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+      transition: background 0.3s, box-shadow 0.3s;
+    }
+
+    .btn-outline:hover {
+      background: var(--neon-dim);
+      box-shadow: var(--neon-glow);
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── SECTIONS COMMON ── */
+    section {
+      position: relative;
+      z-index: 1;
+      padding: 100px 60px;
+    }
+
+    .section-label {
+      font-size: 0.72rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--neon);
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-family: 'Orbitron', monospace;
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.15;
+      margin-bottom: 20px;
+    }
+
+    /* ── STATS ── */
+    .stats {
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 60px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--border);
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .stat-item {
+      background: var(--bg2);
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    .stat-num {
+      font-family: 'Orbitron', monospace;
+      font-size: 2.8rem;
+      font-weight: 900;
+      color: var(--neon);
+      text-shadow: var(--neon-glow);
+      display: block;
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 8px;
+    }
+
+    /* ── ABOUT ── */
+    .about {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .about-text p {
+      color: var(--muted);
+      line-height: 1.9;
+      font-size: 1rem;
+      font-weight: 300;
+      margin-bottom: 16px;
+    }
+
+    .about-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 28px;
+    }
+
+    .tag {
+      border: 1px solid var(--border);
+      background: var(--neon-dim);
+      color: var(--neon);
+      font-size: 0.75rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 8px 16px;
+    }
+
+    .about-visual {
+      position: relative;
+      height: 340px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .about-visual::before {
+      content: 'NEXACON';
+      font-family: 'Orbitron', monospace;
+      font-size: 5rem;
+      font-weight: 900;
+      color: rgba(0,245,255,0.04);
+      letter-spacing: 4px;
+    }
+
+    .about-visual-inner {
+      position: absolute;
+      width: 200px; height: 200px;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      animation: spin 12s linear infinite;
+    }
+
+    .about-visual-inner::before {
+      content: '';
+      position: absolute;
+      top: -4px; left: 50%;
+      width: 8px; height: 8px;
+      background: var(--neon);
+      border-radius: 50%;
+      box-shadow: var(--neon-glow);
+      transform: translateX(-50%);
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* ── SPEAKERS ── */
+    .speakers-section {
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+    }
+
+    .speakers-header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .speakers-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      max-width: 1100px;
+      margin: 0 auto 48px;
+    }
+
+    .speaker-card {
+      border: 1px solid var(--border);
+      background: var(--card);
+      padding: 32px 24px;
+      text-align: center;
+      transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .speaker-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--neon);
+      transform: scaleX(0);
+      transition: transform 0.3s;
+    }
+
+    .speaker-card:hover {
+      border-color: var(--neon);
+      transform: translateY(-6px);
+      box-shadow: 0 20px 40px rgba(0,245,255,0.08);
+    }
+
+    .speaker-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .speaker-avatar {
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      margin: 0 auto 16px;
+      background: var(--neon-dim);
+      border: 2px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Orbitron', monospace;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--neon);
+    }
+
+    .speaker-name {
+      font-family: 'Orbitron', monospace;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 6px;
+      letter-spacing: 1px;
+    }
+
+    .speaker-title {
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .center-btn { text-align: center; }
+
+    /* ── SCHEDULE SNAPSHOT ── */
+    .schedule-snapshot {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .schedule-header {
+      margin-bottom: 40px;
+    }
+
+    .schedule-item {
+      display: grid;
+      grid-template-columns: 100px 1fr;
+      gap: 24px;
+      align-items: start;
+      padding: 24px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .schedule-time {
+      font-family: 'Orbitron', monospace;
+      font-size: 0.78rem;
+      color: var(--neon);
+      letter-spacing: 1px;
+      padding-top: 4px;
+    }
+
+    .schedule-content h4 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 500;
+      font-size: 1rem;
+      color: var(--white);
+      margin-bottom: 4px;
+    }
+
+    .schedule-content p {
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    .schedule-tag {
+      display: inline-block;
+      background: var(--neon-dim);
+      color: var(--neon);
+      font-size: 0.68rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      margin-top: 8px;
+    }
+
+    /* ── CTA ── */
+    .cta-section {
+      text-align: center;
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 100px 40px;
+    }
+
+    .cta-section h2 {
+      font-family: 'Orbitron', monospace;
+      font-size: clamp(2rem, 5vw, 4rem);
+      font-weight: 900;
+      color: var(--white);
+      margin-bottom: 16px;
+      line-height: 1.1;
+    }
+
+    .cta-section h2 span { color: var(--neon); text-shadow: var(--neon-glow); }
+
+    .cta-section p {
+      color: var(--muted);
+      font-size: 1rem;
+      margin-bottom: 40px;
+      font-weight: 300;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative;
+      z-index: 1;
+      padding: 60px;
+      border-top: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 40px;
+      align-items: start;
+    }
+
+    .footer-brand .logo { font-size: 1.1rem; display: block; margin-bottom: 12px; }
+
+    .footer-brand p {
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.7;
+      font-weight: 300;
+    }
+
+    .footer-links h5 {
+      font-family: 'Orbitron', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--neon);
+      margin-bottom: 16px;
+    }
+
+    .footer-links ul { list-style: none; }
+    .footer-links li { margin-bottom: 10px; }
+    .footer-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: color 0.3s;
+    }
+    .footer-links a:hover { color: var(--neon); }
+
+    .footer-bottom {
+      grid-column: 1 / -1;
+      border-top: 1px solid var(--border);
+      padding-top: 24px;
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--muted);
+      letter-spacing: 1px;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 16px 24px; }
+      .nav-links { gap: 20px; }
+      section { padding: 70px 24px; }
+      .stats { padding: 40px 24px; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .about { grid-template-columns: 1fr; gap: 40px; }
+      .about-visual { display: none; }
+      .speakers-grid { grid-template-columns: repeat(2, 1fr); }
+      footer { grid-template-columns: 1fr; padding: 40px 24px; }
+    }
+
+    @media (max-width: 600px) {
+      .nav-links { display: none; }
+      .speakers-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav>
+    <a href="index.html" class="logo">NEXACON</a>
+    <ul class="nav-links">
+      <li><a href="pages/schedule.html">Schedule</a></li>
+      <li><a href="pages/speakers.html">Speakers</a></li>
+      <li><a href="pages/register.html">Register</a></li>
+      <li><a href="pages/contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-orb"></div>
+    <div>
+      <div class="hero-badge">&#9670; The Next Generation Tech Conference</div>
+      <h1>NEXA<span>CON</span></h1>
+      <div class="hero-year">2 0 2 6</div>
+      <p class="hero-sub">Where the boundaries of technology dissolve. Three days of innovation, insight, and the ideas that will define the next decade.</p>
+      <div class="hero-meta">&#9632; March 15–17, 2026 &nbsp;&nbsp;|&nbsp;&nbsp; Bangalore, India</div>
+      <div class="hero-btns">
+        <a href="pages/register.html" class="btn-primary">Register Now</a>
+        <a href="pages/schedule.html" class="btn-outline">View Schedule</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <div class="stats">
+    <div class="stats-grid">
+      <div class="stat-item">
+        <span class="stat-num" data-target="20">0</span>
+        <span class="stat-label">Speakers</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num" data-target="3">0</span>
+        <span class="stat-label">Days</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num" data-target="500">0</span>
+        <span class="stat-label">Attendees</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num" data-target="30">0</span>
+        <span class="stat-label">Sessions</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <section>
+    <div class="about">
+      <div class="about-text">
+        <div class="section-label">&#9670; About the Event</div>
+        <h2 class="section-title">Built for the<br/>Builders of Tomorrow</h2>
+        <p>NexaCon 2026 brings together engineers, designers, researchers, and visionaries under one roof — three days dedicated to the technologies reshaping our world.</p>
+        <p>From artificial intelligence to quantum computing, from open-source to enterprise — NexaCon is where the cutting edge gets sharper.</p>
+        <div class="about-tags">
+          <span class="tag">AI & ML</span>
+          <span class="tag">Web3</span>
+          <span class="tag">Cloud</span>
+          <span class="tag">DevOps</span>
+          <span class="tag">Quantum</span>
+          <span class="tag">Open Source</span>
+        </div>
+      </div>
+      <div class="about-visual">
+        <div class="about-visual-inner"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SPEAKERS -->
+  <section class="speakers-section">
+    <div class="speakers-header">
+      <div class="section-label">&#9670; Featured Speakers</div>
+      <h2 class="section-title">Voices That Move Industries</h2>
+    </div>
+    <div class="speakers-grid">
+      <div class="speaker-card">
+        <div class="speaker-avatar">AK</div>
+        <div class="speaker-name">Arjun Kapoor</div>
+        <div class="speaker-title">CTO, Infosys AI Labs</div>
+      </div>
+      <div class="speaker-card">
+        <div class="speaker-avatar">PR</div>
+        <div class="speaker-name">Priya Rajan</div>
+        <div class="speaker-title">Head of Research, DeepMind India</div>
+      </div>
+      <div class="speaker-card">
+        <div class="speaker-avatar">SM</div>
+        <div class="speaker-name">Siddharth Mehta</div>
+        <div class="speaker-title">Founder, CloudNine Systems</div>
+      </div>
+      <div class="speaker-card">
+        <div class="speaker-avatar">ND</div>
+        <div class="speaker-name">Neha Desai</div>
+        <div class="speaker-title">VP Engineering, Razorpay</div>
+      </div>
+    </div>
+    <div class="center-btn">
+      <a href="pages/speakers.html" class="btn-outline">View All Speakers</a>
+    </div>
+  </section>
+
+  <!-- SCHEDULE SNAPSHOT -->
+  <section>
+    <div class="schedule-snapshot">
+      <div class="schedule-header">
+        <div class="section-label">&#9670; Schedule Snapshot</div>
+        <h2 class="section-title">Day 1 Highlights</h2>
+      </div>
+      <div class="schedule-item">
+        <div class="schedule-time">09:00 AM</div>
+        <div class="schedule-content">
+          <h4>Opening Keynote — The Next Frontier</h4>
+          <p>Arjun Kapoor sets the tone for three days of groundbreaking conversation.</p>
+          <span class="schedule-tag">Keynote</span>
+        </div>
+      </div>
+      <div class="schedule-item">
+        <div class="schedule-time">11:00 AM</div>
+        <div class="schedule-content">
+          <h4>AI in Production: Beyond the Hype</h4>
+          <p>Real-world deployment patterns, failure modes, and what actually works.</p>
+          <span class="schedule-tag">Workshop</span>
+        </div>
+      </div>
+      <div class="schedule-item">
+        <div class="schedule-time">02:00 PM</div>
+        <div class="schedule-content">
+          <h4>Panel: The Open Source Imperative</h4>
+          <p>Why the future of software depends on communities, not corporations.</p>
+          <span class="schedule-tag">Panel</span>
+        </div>
+      </div>
+      <div class="schedule-item">
+        <div class="schedule-time">04:30 PM</div>
+        <div class="schedule-content">
+          <h4>Deep Dive: Quantum Computing for Engineers</h4>
+          <p>A practical intro to what quantum means for your stack today.</p>
+          <span class="schedule-tag">Talk</span>
+        </div>
+      </div>
+      <br/>
+      <div class="center-btn">
+        <a href="pages/schedule.html" class="btn-outline">View Full Schedule</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <h2>Seats are filling up.<br/><span>Secure yours now.</span></h2>
+    <p>Early bird pricing ends February 1, 2026. Don't wait.</p>
+    <a href="pages/register.html" class="btn-primary">Register for NexaCon 2026</a>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-brand">
+      <a href="index.html" class="logo">NEXACON</a>
+      <p>The premier technology conference for the next generation of builders and innovators.</p>
+    </div>
+    <div class="footer-links">
+      <h5>Navigation</h5>
+      <ul>
+        <li><a href="pages/schedule.html">Schedule</a></li>
+        <li><a href="pages/speakers.html">Speakers</a></li>
+        <li><a href="pages/register.html">Register</a></li>
+        <li><a href="pages/contact.html">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-links">
+      <h5>Event Info</h5>
+      <ul>
+        <li><a href="#">March 15–17, 2026</a></li>
+        <li><a href="#">Bangalore, India</a></li>
+        <li><a href="#">info@nexacon.dev</a></li>
+      </ul>
+    </div>
+    <div class="footer-bottom">
+      &copy; 2026 NexaCon. All rights reserved. &nbsp;|&nbsp; Crafted for the curious.
+    </div>
+  </footer>
+
+  <script>
+    // Counter animation for stats
+    const counters = document.querySelectorAll('.stat-num');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const el = entry.target;
+          const target = parseInt(el.dataset.target);
+          const suffix = target >= 100 ? '+' : target > 10 ? '+' : '';
+          let current = 0;
+          const step = Math.ceil(target / 50);
+          const timer = setInterval(() => {
+            current = Math.min(current + step, target);
+            el.textContent = current + suffix;
+            if (current >= target) clearInterval(timer);
+          }, 30);
+          observer.unobserve(el);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    counters.forEach(c => observer.observe(c));
+  </script>
+</body>
+</html>
