@@ -1,1 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Schedule — NexaCon 2026</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Syne:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --neon: #00F5FF;
+      --neon-dim: rgba(0,245,255,0.12);
+      --neon-glow: 0 0 10px #00F5FF, 0 0 30px rgba(0,245,255,0.4);
+      --bg: #040a0f;
+      --bg2: #070e15;
+      --card: rgba(0,245,255,0.04);
+      --border: rgba(0,245,255,0.15);
+      --text: #c8e8ee;
+      --muted: rgba(200,232,238,0.45);
+      --white: #eaf9fb;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Syne', sans-serif;
+      overflow-x: hidden;
+    }
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(rgba(0,245,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,245,255,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none; z-index: 0;
+    }
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 60px;
+      background: rgba(4,10,15,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .logo {
+      font-family: 'Orbitron', monospace; font-weight: 900; font-size: 1.3rem;
+      color: var(--neon); text-shadow: var(--neon-glow); letter-spacing: 2px; text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 40px; list-style: none; }
+    .nav-links a {
+      color: var(--muted); text-decoration: none; font-size: 0.85rem;
+      letter-spacing: 1.5px; text-transform: uppercase; transition: color 0.3s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--neon); text-shadow: var(--neon-glow); }
 
+    .page-hero {
+      position: relative; z-index: 1;
+      padding: 160px 60px 80px;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg2);
+    }
+    .page-hero .section-label {
+      font-size: 0.72rem; letter-spacing: 4px; text-transform: uppercase;
+      color: var(--neon); margin-bottom: 12px;
+    }
+    .page-hero h1 {
+      font-family: 'Orbitron', monospace; font-weight: 900;
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      color: var(--white); line-height: 1;
+    }
+    .page-hero p {
+      color: var(--muted); font-size: 1rem; margin-top: 16px; font-weight: 300; max-width: 500px;
+    }
+
+    .schedule-main {
+      position: relative; z-index: 1;
+      padding: 80px 60px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .day-tabs {
+      display: flex; gap: 0; margin-bottom: 60px;
+      border: 1px solid var(--border);
+      width: fit-content;
+    }
+    .day-tab {
+      padding: 14px 36px;
+      font-family: 'Orbitron', monospace;
+      font-size: 0.78rem; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--muted); cursor: pointer;
+      border-right: 1px solid var(--border);
+      background: transparent; border-top: none; border-bottom: none; border-left: none;
+      transition: background 0.3s, color 0.3s;
+    }
+    .day-tab:last-child { border-right: none; }
+    .day-tab.active { background: var(--neon-dim); color: var(--neon); }
+    .day-tab:hover:not(.active) { background: rgba(0,245,255,0.05); color: var(--text); }
+
+    .day-panel { display: none; }
+    .day-panel.active { display: block; }
+
+    .schedule-row {
+      display: grid;
+      grid-template-columns: 110px 4px 1fr;
+      gap: 0 24px;
+      margin-bottom: 0;
+    }
+    .schedule-row:last-child .s-line { display: none; }
+
+    .s-time {
+      font-family: 'Orbitron', monospace; font-size: 0.78rem;
+      color: var(--neon); padding-top: 2px; text-align: right;
+    }
+    .s-timeline {
+      display: flex; flex-direction: column; align-items: center;
+    }
+    .s-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--neon); box-shadow: var(--neon-glow);
+      flex-shrink: 0; margin-top: 4px;
+    }
+    .s-line {
+      width: 1px; flex: 1; background: var(--border); min-height: 60px;
+    }
+    .s-card {
+      background: var(--card); border: 1px solid var(--border);
+      padding: 24px 28px; margin-bottom: 24px;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .s-card:hover {
+      border-color: var(--neon);
+      box-shadow: 0 8px 30px rgba(0,245,255,0.07);
+    }
+    .s-card h3 {
+      font-family: 'Syne', sans-serif; font-weight: 500;
+      font-size: 1.05rem; color: var(--white); margin-bottom: 6px;
+    }
+    .s-card p { font-size: 0.85rem; color: var(--muted); line-height: 1.6; margin-bottom: 12px; }
+    .s-meta { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+    .s-tag {
+      font-size: 0.68rem; letter-spacing: 2px; text-transform: uppercase;
+      padding: 4px 12px; background: var(--neon-dim); color: var(--neon);
+    }
+    .s-speaker { font-size: 0.78rem; color: var(--muted); }
+
+    footer {
+      position: relative; z-index: 1;
+      padding: 40px 60px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      font-size: 0.78rem; color: var(--muted);
+    }
+    footer a { color: var(--neon); text-decoration: none; }
+
+    @media (max-width: 768px) {
+      nav { padding: 16px 24px; }
+      .nav-links { gap: 16px; }
+      .page-hero, .schedule-main { padding-left: 24px; padding-right: 24px; }
+      .schedule-row { grid-template-columns: 80px 4px 1fr; }
+    }
+    @media (max-width: 500px) {
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="../index.html" class="logo">NEXACON</a>
+    <ul class="nav-links">
+      <li><a href="schedule.html" class="active">Schedule</a></li>
+      <li><a href="speakers.html">Speakers</a></li>
+      <li><a href="register.html">Register</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-hero">
+    <div class="section-label">&#9670; Full Program</div>
+    <h1>SCHEDULE</h1>
+    <p>Three days. Thirty sessions. Zero filler. Explore the complete NexaCon 2026 program below.</p>
+  </div>
+
+  <div class="schedule-main">
+    <div class="day-tabs">
+      <button class="day-tab active" onclick="showDay(0)">Day 1 — Mar 15</button>
+      <button class="day-tab" onclick="showDay(1)">Day 2 — Mar 16</button>
+      <button class="day-tab" onclick="showDay(2)">Day 3 — Mar 17</button>
+    </div>
+
+    <!-- DAY 1 -->
+    <div class="day-panel active" id="day0">
+      <div class="schedule-row">
+        <div class="s-time">09:00 AM</div>
+        <div class="s-timeline"><div class="s-dot"></div><div class="s-line"></div></div>
+        <div class="s-card">
+          <h3>Opening Keynote — The Next Frontier</h3>
+          <p>Setting the tone for three days of groundbreaking conversation around the future of technology.</p>
+          <div class="s-meta"><span class="s-tag">Keynote</span><span class="s-speaker">Arjun Kapoor · Main Stage</span></div>
+        </div>
+      </div>
+      <div class="schedule-row">
+        <div class="s-time">11:00 AM</div>
+        <div class="s-timeline"><div class="s-dot"></div><div class="s-line"></div></div>
+        <div class="s-card">
+          <h3>AI in Production: Beyond the Hype</h3>
+          <p>Real-world deployment patterns, failure modes, and what actually works at scale.</p>
+          <div class="s-meta"><span class="s-tag">Workshop</span><span class="s-speaker">Priya Rajan · Hall B</span></div>
+        </div>
+      </div>
+      <div class="schedule-row">
+        <div class="s-time">01:00 PM</div>
+        <div class="s-timeline"><div class="s-dot"></div><div class="s-line"></div></div>
+        <div class="s-card">
+          <h3>Lunch Break & Networking</h3>
+          <p>Connect with attendees, grab food, and explore the sponsor hall.</p>
+          <div class="s-meta"><span class="s-tag">Break</span></div>
+        </div>
+      </div>
+      <div class="schedule-row">
+        <div class="s-time">02:00 PM</div>
+        <div class="s-timeline"><div class="s-dot"></div><div class="s-line"></div></div>
+        <div class="s-card">
+          <h3>Panel: The Open Source Imperative</h3>
+          <p>Why the future of software depends on communities, not corporations.</p>
+          <div class="s-meta"><span class="s-tag">Panel</span><span class="s-speaker">Multiple Speakers · Main Stage</span></div>
+        </div>
+      </div>
+      <div class="schedule-row">
+        <div class="s-time">04:30 PM</div>
+        <div class="s-timeline"><div class="s-dot"></div><div class="s-line"></div></div>
+        <div class="s-card">
+          <h3>Quantum Computing for Engineers</h3>
+          <p>A practical intro to what quantum means for your stack right now.</p>
+          <div class="s-meta"><span class="s-tag">Talk</span><span class="s-speaker">Neha Desai · Hall A</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DAY 2 -->
+    <div class="day-panel" id="day1">
+      <div class="schedule-row">
+        <div class="s-time">09:30 AM</div>
+        <div class="s-timeline"><div class="s-dot"></div><div class="s-line"></div></div>
+        <div class="s-card">
+          <h3>Day 2 Keynote — Building Responsibly</h3>
+          <p>Ethics, sustainability, and the engineering choices that shape society.</p>
+          <div class="s-meta"><span class="s-tag">Keynote</span><span class="s-speaker">Siddharth Mehta · Main Stage</span></div>
+        </div>
+      </div>
+      <div class="schedule-row">
+        <div class="s-time">11:00 AM</div>
+        <div class="s-timeline"><div class="s-dot"></div><div class="s-line"></div></div>
+        <div class="s-card">
+          <h3>Cloud-Native Architecture at Scale</h3>
+          <p>Microservices, Kubernetes, and the patterns that power modern platforms.</p>
+          <div class="s-meta"><span class="s-tag">Workshop</span><span class="s-speaker">Ravi Shankar · Hall B</span></div>
+        </div>
+      </div>
+      <div class="schedule-row">
+        <div class="s-time">02:00 PM</div>
+        <div class="s-timeline"><div class="s-dot"></div><div class="s-line"></div></div>
+        <div class="s-card">
+          <h3>The Future of Developer Experience</h3>
+          <p>AI-assisted coding, low-code shifts, and where developer tools are heading.</p>
+          <div class="s-meta"><span class="s-tag">Talk</span><span class="s-speaker">Asha Menon · Hall A</span></div>
+        </div>
+      </div>
+      <div class="schedule-row">
+        <div class="s-time">04:00 PM</div>
+        <div class="s-timeline"><div class="s-dot"></div><div class="s-line"></div></div>
+        <div class="s-card">
+          <h3>Hackathon Kickoff</h3>
+          <p>24-hour build challenge begins. Teams form, problems are revealed, caffeine is distributed.</p>
+          <div class="s-meta"><span class="s-tag">Hackathon</span><span class="s-speaker">Innovation Lab</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DAY 3 -->
+    <div class="day-panel" id="day2">
+      <div class="schedule-row">
+        <div class="s-time">10:00 AM</div>
+        <div class="s-timeline"><div class="s-dot"></div><div class="s-line"></div></div>
+        <div class="s-card">
+          <h3>Hackathon Presentations</h3>
+          <p>Teams present 24-hour builds to a panel of judges. Top 5 get stage time.</p>
+          <div class="s-meta"><span class="s-tag">Hackathon</span><span class="s-speaker">Main Stage</span></div>
+        </div>
+      </div>
+      <div class="schedule-row">
+        <div class="s-time">12:00 PM</div>
+        <div class="s-timeline"><div class="s-dot"></div><div class="s-line"></div></div>
+        <div class="s-card">
+          <h3>Web3 & Decentralized Systems — Myth vs Reality</h3>
+          <p>Cutting through the noise to find what actually has legs in the decentralized space.</p>
+          <div class="s-meta"><span class="s-tag">Panel</span><span class="s-speaker">Multiple Speakers · Hall A</span></div>
+        </div>
+      </div>
+      <div class="schedule-row">
+        <div class="s-time">03:00 PM</div>
+        <div class="s-timeline"><div class="s-dot"></div><div class="s-line"></div></div>
+        <div class="s-card">
+          <h3>Closing Keynote — What Comes Next</h3>
+          <p>A look ahead at the next 10 years and the role each of us plays in building it.</p>
+          <div class="s-meta"><span class="s-tag">Keynote</span><span class="s-speaker">Priya Rajan · Main Stage</span></div>
+        </div>
+      </div>
+      <div class="schedule-row">
+        <div class="s-time">05:00 PM</div>
+        <div class="s-timeline"><div class="s-dot"></div><div class="s-line"></div></div>
+        <div class="s-card">
+          <h3>Awards & Closing Ceremony</h3>
+          <p>Hackathon winners announced. Community awards. See you at NexaCon 2027.</p>
+          <div class="s-meta"><span class="s-tag">Ceremony</span><span class="s-speaker">Main Stage</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <a href="../index.html">← Back to Home</a> &nbsp;|&nbsp; &copy; 2026 NexaCon. All rights reserved.
+  </footer>
+
+  <script>
+    function showDay(index) {
+      document.querySelectorAll('.day-panel').forEach((p, i) => {
+        p.classList.toggle('active', i === index);
+      });
+      document.querySelectorAll('.day-tab').forEach((t, i) => {
+        t.classList.toggle('active', i === index);
+      });
+    }
+  </script>
+</body>
+</html>
