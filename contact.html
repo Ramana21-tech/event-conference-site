@@ -363,13 +363,11 @@
 
         // ✅ Step 2: Send email notification via EmailJS (new)
         await emailjs.send("service_m4y1ita", "template_ybbro6k", {
-          from_name: fname + " " + lname,
-          reply_to: email,
-          name: fname + " " + lname,
-          email: email,
-          subject: subject || "No subject selected",
-          message: message
-        });
+  name: fname + " " + lname,
+  email: email,
+  time: new Date().toLocaleString(),
+  message: message
+});
 
         // ✅ Show success message
         document.getElementById('contact-form-inner').style.display = 'none';
