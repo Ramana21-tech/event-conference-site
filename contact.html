@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Contact — NexaCon 2026</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Syne:wght@300;400;500&display=swap" rel="stylesheet"/>
+
+  <!-- ✅ EmailJS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
   <style>
     :root {
       --neon: #00F5FF;
@@ -325,6 +329,9 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
+    // ✅ Initialize EmailJS with your Public Key
+    emailjs.init("rROl1BMxhkBcUX0Dz");
+
     window.submitContact = async function() {
       const fname = document.getElementById('cfname').value.trim();
       const lname = document.getElementById('clname').value.trim();
@@ -344,6 +351,7 @@
       errorMsg.style.display = 'none';
 
       try {
+        // ✅ Step 1: Save to Firebase Firestore (existing)
         await addDoc(collection(db, 'messages'), {
           firstName: fname,
           lastName: lname,
@@ -353,6 +361,17 @@
           timestamp: serverTimestamp()
         });
 
+        // ✅ Step 2: Send email notification via EmailJS (new)
+        await emailjs.send("service_m4y1ita", "template_ybbro6k", {
+          from_name: fname + " " + lname,
+          reply_to: email,
+          name: fname + " " + lname,
+          email: email,
+          subject: subject || "No subject selected",
+          message: message
+        });
+
+        // ✅ Show success message
         document.getElementById('contact-form-inner').style.display = 'none';
         document.getElementById('csuccess').style.display = 'block';
 
