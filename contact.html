@@ -345,8 +345,8 @@
       btn.textContent = 'Sending...';
       errorMsg.style.display = 'none';
 
+      // Step 1: Save to Firebase (non-blocking — won't stop email if it fails)
       try {
-        // Step 1: Save to Firebase Firestore
         await addDoc(collection(db, 'messages'), {
           firstName: fname,
           lastName: lname,
@@ -355,8 +355,12 @@
           message: message,
           timestamp: serverTimestamp()
         });
+      } catch (fbError) {
+        console.warn('Firebase save failed (non-critical):', fbError);
+      }
 
-        // Step 2: Send Gmail notification via EmailJS
+      // Step 2: Send Gmail via EmailJS (this is the critical step)
+      try {
         await emailjs.send("service_m4y1ita", "template_ybbro6k", {
           name: fname + " " + lname,
           email: email,
@@ -368,8 +372,9 @@
         document.getElementById('contact-form-inner').style.display = 'none';
         document.getElementById('csuccess').style.display = 'block';
 
-      } catch (error) {
-        console.error('Error:', error);
+      } catch (ejError) {
+        console.error('EmailJS failed:', ejError);
+        errorMsg.textContent = 'Email sending failed: ' + (ejError.text || ejError.message || JSON.stringify(ejError));
         errorMsg.style.display = 'block';
         btn.disabled = false;
         btn.textContent = 'Send Message';
