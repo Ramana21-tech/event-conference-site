@@ -6,8 +6,14 @@
   <title>Contact — NexaCon 2026</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Syne:wght@300;400;500&display=swap" rel="stylesheet"/>
 
-  <!-- ✅ EmailJS SDK -->
+  <!-- EmailJS SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <!-- Initialize EmailJS OUTSIDE module scope -->
+  <script>
+    window.addEventListener('load', function() {
+      emailjs.init("rROl1BMxhkBcUX0Dz");
+    });
+  </script>
 
   <style>
     :root {
@@ -47,7 +53,6 @@
       letter-spacing: 1.5px; text-transform: uppercase; transition: color 0.3s;
     }
     .nav-links a:hover, .nav-links a.active { color: var(--neon); text-shadow: var(--neon-glow); }
-
     .page-hero {
       position: relative; z-index: 1;
       padding: 160px 60px 80px;
@@ -59,14 +64,12 @@
       font-size: clamp(2.5rem, 6vw, 5rem); color: var(--white); line-height: 1;
     }
     .page-hero p { color: var(--muted); font-size: 1rem; margin-top: 16px; font-weight: 300; max-width: 500px; }
-
     .contact-main {
       position: relative; z-index: 1;
       padding: 80px 60px;
       display: grid; grid-template-columns: 1fr 1.4fr;
       gap: 80px; max-width: 1100px; margin: 0 auto;
     }
-
     .contact-info h2 {
       font-family: 'Orbitron', monospace; font-size: 1.1rem; font-weight: 700;
       color: var(--white); margin-bottom: 28px;
@@ -81,7 +84,6 @@
     }
     .info-block-value { font-size: 0.95rem; color: var(--white); font-weight: 400; margin-bottom: 4px; }
     .info-block-sub { font-size: 0.8rem; color: var(--muted); line-height: 1.6; }
-
     .socials { margin-top: 32px; }
     .socials h3 {
       font-family: 'Orbitron', monospace; font-size: 0.72rem; letter-spacing: 3px;
@@ -95,7 +97,6 @@
       transition: all 0.3s;
     }
     .social-link:hover { border-color: var(--neon); color: var(--neon); background: var(--neon-dim); }
-
     .contact-form h2 {
       font-family: 'Orbitron', monospace; font-size: 1.1rem; font-weight: 700;
       color: var(--white); margin-bottom: 28px;
@@ -117,7 +118,6 @@
     }
     select option { background: var(--bg2); }
     textarea { resize: vertical; min-height: 120px; }
-
     .submit-btn {
       width: 100%; background: var(--neon); color: #040a0f;
       font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.9rem;
@@ -128,7 +128,6 @@
     }
     .submit-btn:hover { box-shadow: var(--neon-glow); transform: translateY(-2px); }
     .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
-
     .success-msg {
       display: none; text-align: center; padding: 40px;
       border: 1px solid var(--neon); background: var(--neon-dim);
@@ -138,13 +137,11 @@
       margin-bottom: 10px; text-shadow: var(--neon-glow);
     }
     .success-msg p { color: var(--muted); font-size: 0.88rem; line-height: 1.7; }
-
     .error-msg {
       display: none; text-align: center; padding: 16px;
       border: 1px solid #ff4444; background: rgba(255,68,68,0.1);
       color: #ff4444; font-size: 0.85rem; margin-top: 12px;
     }
-
     .faq-section {
       position: relative; z-index: 1;
       padding: 0 60px 80px;
@@ -173,14 +170,12 @@
       font-size: 0.85rem; color: var(--muted); line-height: 1.8; padding: 0 24px;
     }
     .faq-a.open { max-height: 200px; padding: 0 24px 20px; }
-
     footer {
       position: relative; z-index: 1;
       padding: 40px 60px; border-top: 1px solid var(--border);
       text-align: center; font-size: 0.78rem; color: var(--muted);
     }
     footer a { color: var(--neon); text-decoration: none; }
-
     @media (max-width: 900px) {
       nav { padding: 16px 24px; }
       .page-hero { padding-left: 24px; padding-right: 24px; }
@@ -313,6 +308,7 @@
     <a href="index.html">← Back to Home</a> &nbsp;|&nbsp; &copy; 2026 NexaCon. All rights reserved.
   </footer>
 
+  <!-- Firebase as module -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
     import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
@@ -329,8 +325,7 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // ✅ Initialize EmailJS with your Public Key
-    emailjs.init("rROl1BMxhkBcUX0Dz");
+    // emailjs.init is now in a separate regular <script> in <head> — no need here
 
     window.submitContact = async function() {
       const fname = document.getElementById('cfname').value.trim();
@@ -351,7 +346,7 @@
       errorMsg.style.display = 'none';
 
       try {
-        // ✅ Step 1: Save to Firebase Firestore (existing)
+        // Step 1: Save to Firebase Firestore
         await addDoc(collection(db, 'messages'), {
           firstName: fname,
           lastName: lname,
@@ -361,15 +356,15 @@
           timestamp: serverTimestamp()
         });
 
-        // ✅ Step 2: Send email notification via EmailJS (new)
+        // Step 2: Send Gmail notification via EmailJS
         await emailjs.send("service_m4y1ita", "template_ybbro6k", {
-  name: fname + " " + lname,
-  email: email,
-  time: new Date().toLocaleString(),
-  message: message
-});
+          name: fname + " " + lname,
+          email: email,
+          time: new Date().toLocaleString(),
+          message: message
+        });
 
-        // ✅ Show success message
+        // Show success
         document.getElementById('contact-form-inner').style.display = 'none';
         document.getElementById('csuccess').style.display = 'block';
 
