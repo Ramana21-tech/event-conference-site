@@ -305,89 +305,11 @@
   </div>
 
   <footer>
-    <a href="index.html">← Back to Home</a> &nbsp;|&nbsp; &copy; 2026 NexaCon. All rights reserved.
+  <p>© 2026 NexaCon. All rights reserved.</p>
+<p style="font-size: 0.8rem; opacity: 0.6; margin-top: 8px;">
+  NexaCon 2026 is a fictional conference created as a frontend/full-stack portfolio project. 
+  No real event, registration, or payment is associated with this site.
+</p>
   </footer>
-
-  <!-- Firebase as module -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyCLm0F7TfQ53BMApMOFmAumogtlfdu20oo",
-      authDomain: "nexacon-2026.firebaseapp.com",
-      projectId: "nexacon-2026",
-      storageBucket: "nexacon-2026.firebasestorage.app",
-      messagingSenderId: "562953755231",
-      appId: "1:562953755231:web:cd745d5ed58a310bc399ea"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
-    // emailjs.init is now in a separate regular <script> in <head> — no need here
-
-    window.submitContact = async function() {
-      const fname = document.getElementById('cfname').value.trim();
-      const lname = document.getElementById('clname').value.trim();
-      const email = document.getElementById('cemail').value.trim();
-      const subject = document.getElementById('csubject').value;
-      const message = document.getElementById('cmessage').value.trim();
-      const btn = document.getElementById('contactBtn');
-      const errorMsg = document.getElementById('contactError');
-
-      if (!fname || !email || !message) {
-        alert('Please fill in name, email, and message.');
-        return;
-      }
-
-      btn.disabled = true;
-      btn.textContent = 'Sending...';
-      errorMsg.style.display = 'none';
-
-      // Step 1: Save to Firebase (non-blocking — won't stop email if it fails)
-      try {
-        await addDoc(collection(db, 'messages'), {
-          firstName: fname,
-          lastName: lname,
-          email: email,
-          subject: subject,
-          message: message,
-          timestamp: serverTimestamp()
-        });
-      } catch (fbError) {
-        console.warn('Firebase save failed (non-critical):', fbError);
-      }
-
-      // Step 2: Send Gmail via EmailJS (this is the critical step)
-      try {
-await emailjs.send("service_9smxxqs", "template_ybbro6k", {
-          name: fname + " " + lname,
-          email: email,
-          time: new Date().toLocaleString(),
-          message: message
-        });
-
-        // Show success
-        document.getElementById('contact-form-inner').style.display = 'none';
-        document.getElementById('csuccess').style.display = 'block';
-
-      } catch (ejError) {
-        console.error('EmailJS failed:', ejError);
-        errorMsg.textContent = 'Email sending failed: ' + (ejError.text || ejError.message || JSON.stringify(ejError));
-        errorMsg.style.display = 'block';
-        btn.disabled = false;
-        btn.textContent = 'Send Message';
-      }
-    };
-
-    window.toggleFaq = function(el) {
-      const answer = el.nextElementSibling;
-      const isOpen = answer.classList.contains('open');
-      document.querySelectorAll('.faq-a').forEach(a => a.classList.remove('open'));
-      document.querySelectorAll('.faq-q').forEach(q => q.classList.remove('open'));
-      if (!isOpen) { answer.classList.add('open'); el.classList.add('open'); }
-    };
-  </script>
 </body>
 </html>
