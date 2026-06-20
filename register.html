@@ -164,6 +164,7 @@
     }
     @media (max-width: 500px) { .nav-links { display: none; } }
   </style>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </head>
 <body>
   <nav>
@@ -282,73 +283,122 @@
 </p>
   </footer>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+  <script>
+  const BACKEND_URL = "https://nexacon-backend.onrender.com";
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyCLm0F7TfQ53BMApMOFmAumogtlfdu20oo",
-      authDomain: "nexacon-2026.firebaseapp.com",
-      projectId: "nexacon-2026",
-      storageBucket: "nexacon-2026.firebasestorage.app",
-      messagingSenderId: "562953755231",
-      appId: "1:562953755231:web:cd745d5ed58a310bc399ea"
-    };
+  const ticketPrices = {
+    "Early Bird": 2499,
+    "Standard": 3999,
+    "VIP": 7999
+  };
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+  let selectedTicket = 'Early Bird';
 
-    let selectedTicket = 'Early Bird';
+  window.selectTicket = function(el, ticketType) {
+    document.querySelectorAll('.ticket-card').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedTicket = ticketType;
+  };
 
-    window.selectTicket = function(el, ticketType) {
-      document.querySelectorAll('.ticket-card').forEach(c => c.classList.remove('selected'));
-      el.classList.add('selected');
-      selectedTicket = ticketType;
-    };
+  window.submitForm = async function() {
+    const fname = document.getElementById('fname').value.trim();
+    const lname = document.getElementById('lname').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const company = document.getElementById('company').value.trim();
+    const btn = document.getElementById('submitBtn');
+    const errorMsg = document.getElementById('errorMsg');
 
-    window.submitForm = async function() {
-      const fname = document.getElementById('fname').value.trim();
-      const lname = document.getElementById('lname').value.trim();
-      const email = document.getElementById('email').value.trim();
-      const phone = document.getElementById('phone').value.trim();
-      const company = document.getElementById('company').value.trim();
-      const source = document.getElementById('source').value;
-      const goals = document.getElementById('goals').value.trim();
-      const btn = document.getElementById('submitBtn');
-      const errorMsg = document.getElementById('errorMsg');
+    if (!fname || !email) {
+      alert('Please fill in at least your first name and email.');
+      return;
+    }
 
-      if (!fname || !email) {
-        alert('Please fill in at least your first name and email.');
-        return;
-      }
+    btn.disabled = true;
+    btn.textContent = 'Processing...';
+    errorMsg.style.display = 'none';
 
-      btn.disabled = true;
-      btn.textContent = 'Submitting...';
-      errorMsg.style.display = 'none';
+    const amount = ticketPrices[selectedTicket];
 
-      try {
-        await addDoc(collection(db, 'registrations'), {
-          firstName: fname,
-          lastName: lname,
+    try {
+      // Step 1: Create order on backend
+      const orderRes = await fetch(`${BACKEND_URL}/api/create-order`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ amount })
+      });
+      const order = await orderRes.json();
+
+      // Step 2: Open Razorpay checkout (TEST MODE)
+      const options = {
+        key: "rzp_test_T3wMxLdreGy5JT",
+        amount: order.amount,
+        currency: "INR",
+        name: "NexaCon 2026 (Demo)",
+        description: selectedTicket + " Pass — Portfolio Demo, No Real Charge",
+        order_id: order.id,
+        handler: async function (response) {
+          // Step 3: Verify payment + save registration
+          try {
+            const verifyRes = await fetch(`${BACKEND_URL}/api/verify-payment`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+                name: fname + ' ' + lname,
+                email: email,
+                phone: phone,
+                company: company,
+                ticketType: selectedTicket,
+                amount: amount
+              })
+            });
+            const result = await verifyRes.json();
+
+            if (result.success) {
+              document.getElementById('reg-form-inner').style.display = 'none';
+              document.getElementById('success').style.display = 'block';
+            } else {
+              throw new Error('Verification failed');
+            }
+          } catch (err) {
+            console.error(err);
+            errorMsg.textContent = 'Payment succeeded but saving failed. Please contact support.';
+            errorMsg.style.display = 'block';
+            btn.disabled = false;
+            btn.textContent = 'Complete Registration';
+          }
+        },
+        prefill: {
+          name: fname + ' ' + lname,
           email: email,
-          phone: phone,
-          company: company,
-          source: source,
-          goals: goals,
-          ticketType: selectedTicket,
-          timestamp: serverTimestamp()
-        });
+          contact: phone
+        },
+        theme: { color: "#00F5FF" },
+        modal: {
+          ondismiss: function() {
+            btn.disabled = false;
+            btn.textContent = 'Complete Registration';
+          }
+        }
+      };
 
-        document.getElementById('reg-form-inner').style.display = 'none';
-        document.getElementById('success').style.display = 'block';
+      const rzp = new Razorpay(options);
+      rzp.open();
 
-      } catch (error) {
-        console.error('Error:', error);
-        errorMsg.style.display = 'block';
-        btn.disabled = false;
-        btn.textContent = 'Complete Registration';
-      }
-    };
-  </script>
+      btn.disabled = false;
+      btn.textContent = 'Complete Registration';
+
+    } catch (error) {
+      console.error('Error:', error);
+      errorMsg.textContent = 'Something went wrong. Please try again.';
+      errorMsg.style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = 'Complete Registration';
+    }
+  };
+</script>
 </body>
 </html>
