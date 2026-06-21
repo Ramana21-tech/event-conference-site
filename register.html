@@ -3,34 +3,62 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <script>
+  (function() {
+    const saved = localStorage.getItem('theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', saved);
+  })();
+</script>
   <title>Register — NexaCon 2026</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Syne:wght@300;400;500&display=swap" rel="stylesheet"/>
   <style>
     :root {
-      --neon: #00F5FF;
-      --neon-dim: rgba(0,245,255,0.12);
-      --neon-glow: 0 0 10px #00F5FF, 0 0 30px rgba(0,245,255,0.4);
-      --bg: #040a0f;
-      --bg2: #070e15;
-      --card: rgba(0,245,255,0.04);
-      --border: rgba(0,245,255,0.15);
-      --text: #c8e8ee;
-      --muted: rgba(200,232,238,0.45);
-      --white: #eaf9fb;
-    }
+  --neon: #00F5FF;
+  --neon-dim: rgba(0,245,255,0.12);
+  --neon-glow: 0 0 10px #00F5FF, 0 0 30px rgba(0,245,255,0.4);
+  --bg: #040a0f;
+  --bg2: #070e15;
+  --card: rgba(0,245,255,0.04);
+  --border: rgba(0,245,255,0.15);
+  --text: #c8e8ee;
+  --muted: rgba(200,232,238,0.45);
+  --white: #eaf9fb;
+  --grid-line: rgba(0,245,255,0.03);
+  --nav-bg: rgba(4,10,15,0.85);
+  --focus-glow: rgba(0,245,255,0.1);
+  --perk-border: rgba(0,245,255,0.06);
+}
+
+html[data-theme="light"] {
+  --neon: #0e7c86;
+  --neon-dim: rgba(14,124,134,0.10);
+  --neon-glow: none;
+  --bg: #f7f4ed;
+  --bg2: #ffffff;
+  --card: rgba(14,124,134,0.04);
+  --border: rgba(14,124,134,0.18);
+  --text: #2b3338;
+  --muted: rgba(43,51,56,0.55);
+  --white: #15201f;
+  --grid-line: rgba(14,124,134,0.05);
+  --nav-bg: rgba(247,244,237,0.88);
+  --focus-glow: rgba(14,124,134,0.12);
+  --perk-border: rgba(14,124,134,0.08);
+}
+2. Four hardcoded spots to swap:
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { background: var(--bg); color: var(--text); font-family: 'Syne', sans-serif; overflow-x: hidden; }
     body::before {
       content: ''; position: fixed; inset: 0;
       background-image:
-        linear-gradient(rgba(0,245,255,0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,245,255,0.03) 1px, transparent 1px);
+  linear-gradient(var(--grid-line) 1px, transparent 1px),
+  linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
       background-size: 60px 60px; pointer-events: none; z-index: 0;
     }
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
       display: flex; align-items: center; justify-content: space-between;
-      padding: 20px 60px; background: rgba(4,10,15,0.85);
+      padding: 20px 60px; background: var(--nav-bg);
       backdrop-filter: blur(12px); border-bottom: 1px solid var(--border);
     }
     .logo {
@@ -74,7 +102,7 @@
       position: relative;
     }
     .ticket-card.selected {
-      border-color: var(--neon); box-shadow: 0 0 20px rgba(0,245,255,0.1);
+      border-color: var(--neon); box-shadow: 0 0 20px var(--focus-glow);
     }
     .ticket-card.selected::before {
       content: '✓';
@@ -95,7 +123,7 @@
     .ticket-perks { list-style: none; }
     .ticket-perks li {
       font-size: 0.8rem; color: var(--muted); padding: 4px 0;
-      border-bottom: 1px solid rgba(0,245,255,0.06);
+     border-bottom: 1px solid var(--perk-border);
     }
     .ticket-perks li::before { content: '▸ '; color: var(--neon); }
 
@@ -116,7 +144,7 @@
       transition: border-color 0.3s, box-shadow 0.3s;
     }
     input:focus, select:focus, textarea:focus {
-      border-color: var(--neon); box-shadow: 0 0 12px rgba(0,245,255,0.1);
+      border-color: var(--neon); box-shadow: 0 0 12px var(--focus-glow);
     }
     select option { background: var(--bg2); }
     textarea { resize: vertical; min-height: 90px; }
@@ -176,6 +204,7 @@
       <li><a href="register.html" class="active">Register</a></li>
       <li><a href="contact.html">Contact</a></li>
     </ul>
+    <button id="themeToggle" aria-label="Toggle theme" style="background:none;border:1px solid var(--border);color:var(--text);border-radius:20px;padding:6px 14px;cursor:pointer;font-size:14px;">🌙</button>
   </nav>
 
   <div class="page-hero">
@@ -399,6 +428,23 @@
       btn.textContent = 'Complete Registration';
     }
   };
+    <script>
+  const toggleBtn = document.getElementById('themeToggle');
+  const html = document.documentElement;
+
+  function updateIcon() {
+    toggleBtn.textContent = html.getAttribute('data-theme') === 'light' ? '☀️' : '🌙';
+  }
+  updateIcon();
+
+  toggleBtn.addEventListener('click', () => {
+    const current = html.getAttribute('data-theme');
+    const next = current === 'light' ? 'dark' : 'light';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+    updateIcon();
+  });
+</script>
 </script>
 </body>
 </html>
