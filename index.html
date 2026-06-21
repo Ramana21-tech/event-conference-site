@@ -7,21 +7,36 @@
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Syne:wght@300;400;500&display=swap" rel="stylesheet"/>
   <style>
     :root {
-      --neon: #00F5FF;
-      --neon-dim: rgba(0,245,255,0.15);
-      --neon-glow: 0 0 10px #00F5FF, 0 0 30px rgba(0,245,255,0.4);
-      --bg: #040a0f;
-      --bg2: #070e15;
-      --card: rgba(0,245,255,0.04);
-      --border: rgba(0,245,255,0.15);
-      --text: #c8e8ee;
-      --muted: rgba(200,232,238,0.45);
-      --white: #eaf9fb;
-    }
+  --neon: #00F5FF;
+  --neon-dim: rgba(0,245,255,0.15);
+  --neon-glow: 0 0 10px #00F5FF, 0 0 30px rgba(0,245,255,0.4);
+  --bg: #040a0f;
+  --bg2: #070e15;
+  --card: rgba(0,245,255,0.04);
+  --border: rgba(0,245,255,0.15);
+  --text: #c8e8ee;
+  --muted: rgba(200,232,238,0.45);
+  --white: #eaf9fb;
+  --grid-line: rgba(0,245,255,0.03);
+  --nav-bg: rgba(4,10,15,0.85);
+  --watermark: rgba(0,245,255,0.04);
+}
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    html { scroll-behavior: smooth; }
+html[data-theme="light"] {
+  --neon: #0e7c86;
+  --neon-dim: rgba(14,124,134,0.12);
+  --neon-glow: none;
+  --bg: #f7f4ed;
+  --bg2: #ffffff;
+  --card: rgba(14,124,134,0.04);
+  --border: rgba(14,124,134,0.18);
+  --text: #2b3338;
+  --muted: rgba(43,51,56,0.55);
+  --white: #15201f;
+  --grid-line: rgba(14,124,134,0.05);
+  --nav-bg: rgba(247,244,237,0.88);
+  --watermark: rgba(14,124,134,0.05);
+}
 
     body {
       background: var(--bg);
@@ -35,10 +50,9 @@
       content: '';
       position: fixed;
       inset: 0;
-      background-image:
-        linear-gradient(rgba(0,245,255,0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,245,255,0.03) 1px, transparent 1px);
-      background-size: 60px 60px;
+     background-image:
+  linear-gradient(var(--grid-line) 1px, transparent 1px),
+  linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
       pointer-events: none;
       z-index: 0;
     }
@@ -52,7 +66,7 @@
       align-items: center;
       justify-content: space-between;
       padding: 20px 60px;
-      background: rgba(4,10,15,0.85);
+     background: var(--nav-bg);
       backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border);
     }
@@ -349,7 +363,7 @@
       font-family: 'Orbitron', monospace;
       font-size: 5rem;
       font-weight: 900;
-      color: rgba(0,245,255,0.04);
+      color: var(--watermark);
       letter-spacing: 4px;
     }
 
