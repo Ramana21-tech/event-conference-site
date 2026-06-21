@@ -3,6 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <script>
+    (function() {
+      const saved = localStorage.getItem('theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', saved);
+    })();
+  </script>
   <title>NexaCon 2026</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Syne:wght@300;400;500&display=swap" rel="stylesheet"/>
   <style>
@@ -118,7 +124,7 @@ html[data-theme="light"] {
       position: absolute;
       width: 600px; height: 600px;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(0,245,255,0.08) 0%, transparent 70%);
+      background: radial-gradient(circle, var(--orb-glow) 0%, transparent 70%);
       top: 50%; left: 50%;
       transform: translate(-50%, -50%);
       animation: pulse 4s ease-in-out infinite;
@@ -433,7 +439,7 @@ html[data-theme="light"] {
     .speaker-card:hover {
       border-color: var(--neon);
       transform: translateY(-6px);
-      box-shadow: 0 20px 40px rgba(0,245,255,0.08);
+      box-shadow: 0 20px 40px var(--hover-shadow);
     }
 
     .speaker-card:hover::before {
@@ -630,6 +636,9 @@ html[data-theme="light"] {
 <li><a href="register.html">Register</a></li>
 <li><a href="contact.html">Contact</a></li>
     </ul>
+    <button id="themeToggle" aria-label="Toggle theme" style="background:none;border:1px solid var(--border);color:var(--text);border-radius:20px;padding:6px 14px;cursor:pointer;font-size:14px;">🌙</button>
+  </nav>
+    </ul>
   </nav>
 
   <!-- HERO -->
@@ -815,8 +824,23 @@ html[data-theme="light"] {
     </div>
     
   </footer>
-
+  
   <script>
+    const toggleBtn = document.getElementById('themeToggle');
+    const html = document.documentElement;
+
+    function updateIcon() {
+      toggleBtn.textContent = html.getAttribute('data-theme') === 'light' ? '☀️' : '🌙';
+    }
+    updateIcon();
+
+    toggleBtn.addEventListener('click', () => {
+      const current = html.getAttribute('data-theme');
+      const next = current === 'light' ? 'dark' : 'light';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+      updateIcon();
+    });
     // Counter animation for stats
     const counters = document.querySelectorAll('.stat-num');
     const observer = new IntersectionObserver((entries) => {
