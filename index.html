@@ -76,17 +76,6 @@ html[data-theme="light"] {
       backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border);
     }
-
-    .logo {
-      font-family: 'Orbitron', monospace;
-      font-weight: 900;
-      font-size: 1.3rem;
-      color: var(--neon);
-      text-shadow: var(--neon-glow);
-      letter-spacing: 2px;
-      text-decoration: none;
-    }
-
     .nav-links {
       display: flex;
       gap: 40px;
@@ -363,15 +352,9 @@ html[data-theme="light"] {
       justify-content: center;
       overflow: hidden;
     }
-
     .about-visual::before {
-      content: 'NEXACON';
-      font-family: 'Orbitron', monospace;
-      font-size: 5rem;
-      font-weight: 900;
-      color: var(--watermark);
-      letter-spacing: 4px;
-    }
+  content: none;
+}
 
     .about-visual-inner {
       position: absolute;
@@ -700,7 +683,6 @@ html[data-theme="light"] {
           <span class="tag">Open Source</span>
         </div>
       </div>
-      <div class="about-visual">
   <img 
     src="Circuit-image.png" 
     alt="NexaCon circuit illustration" 
