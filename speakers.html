@@ -131,6 +131,16 @@ html[data-theme="light"] {
       display: flex; align-items: center; justify-content: center;
       font-family: 'Orbitron', monospace; font-size: 1.6rem; font-weight: 700;
       color: var(--neon); margin-bottom: 20px;
+      overflow: hidden;
+    }
+    .speaker-avatar img {
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center top;
+      display: block; border-radius: 50%;
+      transition: transform 0.3s;
+    }
+    .speaker-card:hover .speaker-avatar img {
+      transform: scale(1.08);
     }
     .speaker-name {
       font-family: 'Orbitron', monospace; font-size: 0.9rem; font-weight: 700;
@@ -192,116 +202,139 @@ html[data-theme="light"] {
     <h1>SPEAKERS</h1>
     <p>Industry leaders, researchers, and builders sharing the ideas that matter in 2026.</p>
     <p style="font-size: 0.85rem; opacity: 0.65; max-width: 600px; margin: 0 auto 24px;">
-  All speaker profiles below are fictional and created for portfolio demonstration purposes only.
-</p>
+      All speaker profiles below are fictional and created for portfolio demonstration purposes only.
+    </p>
   </div>
 
- <div class="speakers-main">
+  <div class="speakers-main">
 
-  <p style="font-size: 0.85rem; opacity: 0.65; max-width: 600px; margin: 0 auto 24px; text-align: center;">
-    All speaker profiles below are fictional and created for portfolio demonstration purposes only.
-  </p>
+    <p style="font-size: 0.85rem; opacity: 0.65; max-width: 600px; margin: 0 auto 24px; text-align: center;">
+      All speaker profiles below are fictional and created for portfolio demonstration purposes only.
+    </p>
 
-  <div class="filter-bar">
-    <button class="filter-btn active">All</button>
-    <button class="filter-btn">AI & ML</button>
-    <button class="filter-btn">Cloud</button>
-    <button class="filter-btn">Web3</button>
-    <button class="filter-btn">DevOps</button>
-  </div>
+    <div class="filter-bar">
+      <button class="filter-btn active">All</button>
+      <button class="filter-btn">AI & ML</button>
+      <button class="filter-btn">Cloud</button>
+      <button class="filter-btn">Web3</button>
+      <button class="filter-btn">DevOps</button>
+    </div>
 
-  <div class="speakers-grid">
-    <div class="speaker-card featured-speaker" data-topic="ai">
-  <div class="speaker-avatar">RV</div>
-  <div>
-    <div class="speaker-name">Rohan Varma</div>
-    <div class="speaker-role">Opening Keynote Speaker</div>
-    <div class="speaker-company">AI Strategy Lead</div>
-    <p class="speaker-bio">Works on enterprise AI adoption strategy and contributes to public discussions on responsible AI policy.</p>
-    <span class="speaker-topic">AI & ML</span>
-  </div>
-</div>
+    <div class="speakers-grid">
 
-     <div class="speaker-card" data-topic="ai">
-  <div class="speaker-avatar">AI</div>
-  <div>
-    <div class="speaker-name">Ananya Iyer</div>
-    <div class="speaker-role">Closing Keynote Speaker</div>
-    <div class="speaker-company">Research Lead, AI Safety</div>
-    <p class="speaker-bio">Focuses on reinforcement learning and AI safety research, with an interest in making AI systems more transparent and trustworthy.</p>
-    <span class="speaker-topic">AI & ML</span>
-  </div>
-</div>
+      <!-- Rohan Varma — Featured -->
+      <div class="speaker-card featured-speaker" data-topic="ai">
+        <div class="speaker-avatar">
+          <img src="Rohanvarma.png" alt="Rohan Varma" />
+        </div>
+        <div>
+          <div class="speaker-name">Rohan Varma</div>
+          <div class="speaker-role">Opening Keynote Speaker</div>
+          <div class="speaker-company">AI Strategy Lead</div>
+          <p class="speaker-bio">Works on enterprise AI adoption strategy and contributes to public discussions on responsible AI policy.</p>
+          <span class="speaker-topic">AI & ML</span>
+        </div>
+      </div>
 
-      <div class="speaker-card" data-topic="cloud">
-  <div class="speaker-avatar">KS</div>
-  <div>
-    <div class="speaker-name">Karthik Subramaniam</div>
-    <div class="speaker-role">Day 2 Keynote</div>
-    <div class="speaker-company">Cloud Infrastructure Founder</div>
-    <p class="speaker-bio">Has built cloud infrastructure ventures and now explores sustainable tech and responsible AI deployment.</p>
-    <span class="speaker-topic">Cloud</span>
-  </div>
-</div>
-
-     <div class="speaker-card" data-topic="cloud">
-  <div class="speaker-avatar">MK</div>
-  <div>
-    <div class="speaker-name">Meera Krishnan</div>
-    <div class="speaker-role">Workshop Lead</div>
-    <div class="speaker-company">Engineering Leader</div>
-    <p class="speaker-bio">Specializes in scaling distributed systems, with a particular interest in payment infrastructure and applied cryptography.</p>
-    <span class="speaker-topic">Cloud</span>
-  </div>
-</div>
-
-      <div class="speaker-card" data-topic="devops">
-  <div class="speaker-avatar">VR</div>
-  <div>
-    <div class="speaker-name">Vikram Rao</div>
-    <div class="speaker-role">Workshop Speaker</div>
-    <div class="speaker-company">Cloud-Native Architect</div>
-    <p class="speaker-bio">Works on open-source cloud tooling and serverless architecture, with a focus on developer experience.</p>
-    <span class="speaker-topic">DevOps</span>
-  </div>
-</div>
+      <!-- Ananya Iyer -->
       <div class="speaker-card" data-topic="ai">
-  <div class="speaker-avatar">DB</div>
-  <div>
-    <div class="speaker-name">Divya Bhatt</div>
-    <div class="speaker-role">Talk Speaker</div>
-    <div class="speaker-company">Developer Tooling Lead</div>
-    <p class="speaker-bio">Builds tooling aimed at improving the developer experience, including AI-assisted code review workflows.</p>
-    <span class="speaker-topic">AI & ML</span>
-  </div>
-</div>
+        <div class="speaker-avatar">
+          <img src="Ananyalyer.png" alt="Ananya Iyer" />
+        </div>
+        <div>
+          <div class="speaker-name">Ananya Iyer</div>
+          <div class="speaker-role">Closing Keynote Speaker</div>
+          <div class="speaker-company">Research Lead, AI Safety</div>
+          <p class="speaker-bio">Focuses on reinforcement learning and AI safety research, with an interest in making AI systems more transparent and trustworthy.</p>
+          <span class="speaker-topic">AI & ML</span>
+        </div>
+      </div>
+
+      <!-- Karthik Subramaniam -->
+      <div class="speaker-card" data-topic="cloud">
+        <div class="speaker-avatar">
+          <img src="KarthikSubramaniam.png" alt="Karthik Subramaniam" />
+        </div>
+        <div>
+          <div class="speaker-name">Karthik Subramaniam</div>
+          <div class="speaker-role">Day 2 Keynote</div>
+          <div class="speaker-company">Cloud Infrastructure Founder</div>
+          <p class="speaker-bio">Has built cloud infrastructure ventures and now explores sustainable tech and responsible AI deployment.</p>
+          <span class="speaker-topic">Cloud</span>
+        </div>
+      </div>
+
+      <!-- Meera Krishnan -->
+      <div class="speaker-card" data-topic="cloud">
+        <div class="speaker-avatar">
+          <img src="MeeraKrishnan.png" alt="Meera Krishnan" />
+        </div>
+        <div>
+          <div class="speaker-name">Meera Krishnan</div>
+          <div class="speaker-role">Workshop Lead</div>
+          <div class="speaker-company">Engineering Leader</div>
+          <p class="speaker-bio">Specializes in scaling distributed systems, with a particular interest in payment infrastructure and applied cryptography.</p>
+          <span class="speaker-topic">Cloud</span>
+        </div>
+      </div>
+
+      <!-- Vikram Rao -->
+      <div class="speaker-card" data-topic="devops">
+        <div class="speaker-avatar">
+          <img src="VikramRao.png" alt="Vikram Rao" />
+        </div>
+        <div>
+          <div class="speaker-name">Vikram Rao</div>
+          <div class="speaker-role">Workshop Speaker</div>
+          <div class="speaker-company">Cloud-Native Architect</div>
+          <p class="speaker-bio">Works on open-source cloud tooling and serverless architecture, with a focus on developer experience.</p>
+          <span class="speaker-topic">DevOps</span>
+        </div>
+      </div>
+
+      <!-- Divya Bhatt -->
+      <div class="speaker-card" data-topic="ai">
+        <div class="speaker-avatar">
+          <img src="DivyaBhatt.png" alt="Divya Bhatt" />
+        </div>
+        <div>
+          <div class="speaker-name">Divya Bhatt</div>
+          <div class="speaker-role">Talk Speaker</div>
+          <div class="speaker-company">Developer Tooling Lead</div>
+          <p class="speaker-bio">Builds tooling aimed at improving the developer experience, including AI-assisted code review workflows.</p>
+          <span class="speaker-topic">AI & ML</span>
+        </div>
+      </div>
+
+    </div>
   </div>
 
   <footer>
-    <a href="index.html">← Back to Home</a> 
+    <a href="index.html">← Back to Home</a>
     <p>© 2026 NexaCon. All rights reserved.</p>
-<p style="font-size: 0.8rem; opacity: 0.6; margin-top: 8px;">
-  NexaCon 2026 is a fictional conference created as a frontend/full-stack portfolio project. 
-  No real event, registration, or payment is associated with this site.
-</p>
+    <p style="font-size: 0.8rem; opacity: 0.6; margin-top: 8px;">
+      NexaCon 2026 is a fictional conference created as a frontend/full-stack portfolio project.
+      No real event, registration, or payment is associated with this site.
+    </p>
   </footer>
 
   <script>
-     const toggleBtn = document.getElementById('themeToggle');
-  const html = document.documentElement;
+    const toggleBtn = document.getElementById('themeToggle');
+    const html = document.documentElement;
 
-  function updateIcon() {
-    toggleBtn.textContent = html.getAttribute('data-theme') === 'light' ? '☀️' : '🌙';
-  }
-  updateIcon();
-
-  toggleBtn.addEventListener('click', () => {
-    const current = html.getAttribute('data-theme');
-    const next = current === 'light' ? 'dark' : 'light';
-    html.setAttribute('data-theme', next);
-    localStorage.setItem('theme', next);
+    function updateIcon() {
+      toggleBtn.textContent = html.getAttribute('data-theme') === 'light' ? '☀️' : '🌙';
+    }
     updateIcon();
-  });
+
+    toggleBtn.addEventListener('click', () => {
+      const current = html.getAttribute('data-theme');
+      const next = current === 'light' ? 'dark' : 'light';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+      updateIcon();
+    });
+
     document.querySelectorAll('.filter-btn').forEach(btn => {
       btn.addEventListener('click', function () {
         document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
