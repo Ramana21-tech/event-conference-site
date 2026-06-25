@@ -356,86 +356,89 @@ html[data-theme="light"] {
   content: none;
 }
     /* ── SPEAKERS ── */
-    .speakers-section {
-      background: var(--bg2);
-      border-top: 1px solid var(--border);
-    }
-
-    .speakers-header {
-      text-align: center;
-      margin-bottom: 60px;
-    }
-
-    .speakers-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 24px;
-      max-width: 1100px;
-      margin: 0 auto 48px;
-    }
-
-    .speaker-card {
-      border: 1px solid var(--border);
-      background: var(--card);
-      padding: 32px 24px;
-      text-align: center;
-      transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .speaker-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 2px;
-      background: var(--neon);
-      transform: scaleX(0);
-      transition: transform 0.3s;
-    }
-
-    .speaker-card:hover {
-      border-color: var(--neon);
-      transform: translateY(-6px);
-      box-shadow: 0 20px 40px var(--hover-shadow);
-    }
-
-    .speaker-card:hover::before {
-      transform: scaleX(1);
-    }
-
-    .speaker-avatar {
-      width: 80px; height: 80px;
-      border-radius: 50%;
-      margin: 0 auto 16px;
-      background: var(--neon-dim);
-      border: 2px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Orbitron', monospace;
-      font-size: 1.4rem;
-      font-weight: 700;
-      color: var(--neon);
-    }
-
-    .speaker-name {
-      font-family: 'Orbitron', monospace;
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: var(--white);
-      margin-bottom: 6px;
-      letter-spacing: 1px;
-    }
-
-    .speaker-title {
-      font-size: 0.78rem;
-      color: var(--muted);
-      line-height: 1.5;
-    }
-
-    .center-btn { text-align: center; }
-
+.speakers-section {
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+}
+.speakers-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+.speakers-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  max-width: 1100px;
+  margin: 0 auto 48px;
+}
+.speaker-card {
+  border: 1px solid var(--border);
+  background: var(--card);
+  padding: 32px 24px;
+  text-align: center;
+  transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+.speaker-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--neon);
+  transform: scaleX(0);
+  transition: transform 0.3s;
+}
+.speaker-card:hover {
+  border-color: var(--neon);
+  transform: translateY(-6px);
+  box-shadow: 0 20px 40px var(--hover-shadow);
+}
+.speaker-card:hover::before {
+  transform: scaleX(1);
+}
+.speaker-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin: 0 auto 16px;
+  background: var(--neon-dim);
+  border: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Orbitron', monospace;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--neon);
+  overflow: hidden; /* ← clips image to circle */
+}
+.speaker-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;  /* ← fills circle without distortion */
+  object-position: center top; /* ← focuses on face area */
+  display: block;
+  border-radius: 50%;
+  transition: transform 0.3s;
+}
+.speaker-card:hover .speaker-avatar img {
+  transform: scale(1.08); /* ← subtle zoom on hover */
+}
+.speaker-name {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 6px;
+  letter-spacing: 1px;
+}
+.speaker-title {
+  font-size: 0.78rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+.center-btn { text-align: center; }
     /* ── SCHEDULE SNAPSHOT ── */
     .schedule-snapshot {
       max-width: 900px;
@@ -669,7 +672,8 @@ html[data-theme="light"] {
 </section>
 
   <!-- SPEAKERS -->
-  <section class="speakers-section">
+  <!-- SPEAKERS -->
+<section class="speakers-section">
   <div class="speakers-header">
     <div class="section-label">&#9670; Featured Speakers</div>
     <h2 class="section-title">Voices That Move Industries</h2>
@@ -679,22 +683,30 @@ html[data-theme="light"] {
   </p>
   <div class="speakers-grid">
     <div class="speaker-card">
-      <div class="speaker-avatar">RV</div>
+      <div class="speaker-avatar">
+        <img src="Rohanvarma.png" alt="Rohan Varma" />
+      </div>
       <div class="speaker-name">Rohan Varma</div>
       <div class="speaker-title">AI Strategy Lead</div>
     </div>
     <div class="speaker-card">
-      <div class="speaker-avatar">AI</div>
+      <div class="speaker-avatar">
+        <img src="Ananyalyer.png" alt="Ananya Iyer" />
+      </div>
       <div class="speaker-name">Ananya Iyer</div>
       <div class="speaker-title">Research Lead, AI Safety</div>
     </div>
     <div class="speaker-card">
-      <div class="speaker-avatar">KS</div>
+      <div class="speaker-avatar">
+        <img src="KarthikSubramaniam.png" alt="Karthik Subramaniam" />
+      </div>
       <div class="speaker-name">Karthik Subramaniam</div>
       <div class="speaker-title">Cloud Infrastructure Founder</div>
     </div>
     <div class="speaker-card">
-      <div class="speaker-avatar">MK</div>
+      <div class="speaker-avatar">
+        <img src="MeeraKrishnan.png" alt="Meera Krishnan" />
+      </div>
       <div class="speaker-name">Meera Krishnan</div>
       <div class="speaker-title">Engineering Leader</div>
     </div>
