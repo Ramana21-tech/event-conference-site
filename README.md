@@ -45,3 +45,26 @@ It includes a multi-page frontend, a live REST API, a cloud database, a real pay
 ---
 
 ## 🏗️ Architecture
+
+Browser → GitHub Pages (Frontend) → Render (Node.js API) → MongoDB Atlas (Database)
+
+↓                          ↓
+
+EmailJS                    Razorpay
+
+(Contact Form)            (Payment Verification)
+
+---
+
+## 📄 Documentation
+
+Full project documentation available here:
+👉 [NexaCon 2026 — Project Documentation](https://docs.google.com/document/d/1PKlQkXykDwl3wK1Zcq-PVhX5kf23BygR/view?usp=sharing)
+
+---
+
+## 👨‍💻 Developed By
+
+**Ramana V S** — MCA, St. Joseph's College (Autonomous), Tiruchirappalli
+
+Internship at **Media Wave Technologies** · May–June 2026
