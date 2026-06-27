@@ -383,12 +383,13 @@
       errorMsg.style.display = 'none';
 
       try {
-        await emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', {
-          from_name: fname + ' ' + lname,
-          from_email: email,
-          subject: subject,
-          message: message
-        });
+        await emailjs.send('service_9smxxqs', 'template_ybbro6k', {
+  name: fname + ' ' + lname,
+  email: email,
+  time: new Date().toLocaleString(),
+  message: message,
+  subject: subject
+});
 
         document.getElementById('contact-form-inner').style.display = 'none';
         document.getElementById('csuccess').style.display = 'block';
